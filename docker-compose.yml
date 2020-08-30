@@ -1,0 +1,23 @@
+version: '3.7'
+
+volumes:
+  prismagram-db-volume: {}
+
+services:
+  prismagram-db:
+    container_name: prismagram-db
+    build:
+      context: prismagram-db/
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - prismagram-db-volume:/var/lib/mysql
+      - ./prismagram-db/config:/docker-entrypoint-initdb.d/:ro
+      - ./prismagram-db/config:/etc/mysql/conf.d
+    ports:
+      - "3306:3306"
+    networks:
+      - prismagram
+
+networks:
+  prismagram:
+
