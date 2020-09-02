@@ -1,0 +1,41 @@
+type User {
+    id: Int
+    username: String
+    email: String
+    firstName: String
+    lastName: String
+    bio: String
+    posts: [Post]
+    comments: [Comment]
+    likes: [Like]
+    rooms: [Room]
+    followedBy: [User]
+    following: [User]
+}
+
+type Post {
+    id: Int
+    location: String
+    caption: String
+    user: User
+}
+
+type Comment {
+    id: Int
+    text: String
+    user: User
+    post: Post
+}
+
+type Like {
+    id: Int
+    text: String
+    user: User
+    post: Post
+}
+
+
+type Room {
+    id: Int
+    users: [User]
+}
