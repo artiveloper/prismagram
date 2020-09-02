@@ -22,7 +22,7 @@
     "nodemon": "^2.0.4"
   },
   "scripts": {
-    "dev": "nodemon --exec src/server.js",
+    "dev": "nodemon --exec babel-node src/server.js",
     "prisma": "prisma migrate save --experimental && prisma migrate up --experimental && prisma generate",
     "studio": "prisma studio --experimental"
   }
