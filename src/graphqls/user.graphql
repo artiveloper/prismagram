@@ -13,4 +13,6 @@ type Mutation {
     ): User!
 
     requestSecret(email: String!): Boolean!
+
+    confirmSecret(email: String!, secret: String!): String!
 }

@@ -35,6 +35,20 @@ export default {
                 console.error(error)
                 return false
             }
+        },
+
+        confirmSecret: async (_, args) => {
+            const {email, secret} = args
+            const user = await prisma.user.findOne(
+                {
+                    where: {email}
+                }
+            )
+            if (user.loginSecret === secret) {
+                return "TOKEN"
+            } else {
+                throw Error("Wrong email/secret combination.")
+            }
         }
     }
 }
