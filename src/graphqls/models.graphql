@@ -5,6 +5,7 @@ type User {
     firstName: String
     lastName: String
     bio: String
+    loginSecret: String
     posts: [Post]
     comments: [Comment]
     likes: [Like]

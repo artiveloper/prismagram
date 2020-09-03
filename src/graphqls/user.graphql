@@ -11,4 +11,6 @@ type Mutation {
         lastName: String,
         bio: String
     ): User!
+
+    requestSecret(email: String!): Boolean!
 }

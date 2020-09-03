@@ -17,6 +17,7 @@ model User {
     firstName String @default("")
     lastName String @default("")
     bio String
+    loginSecret String
     posts Post[]
     likes Like[]
     comments Comment[]
