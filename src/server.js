@@ -4,13 +4,10 @@ import path from 'path'
 import {GraphQLServer} from 'graphql-yoga'
 import {makeExecutableSchema} from 'graphql-tools'
 import {fileLoader, mergeTypes, mergeResolvers} from 'merge-graphql-schemas'
-import {sendSecretMail} from './utils/email';
 
 dotenv.config()
 
 const PORT = process.env.PORT || 4000
-
-console.log(sendSecretMail("artiveloper@gmail.com", "asdfasdfasdf"))
 
 /*
     graphql configuration.
