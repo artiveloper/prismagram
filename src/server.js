@@ -4,6 +4,9 @@ import path from 'path'
 import {GraphQLServer} from 'graphql-yoga'
 import {makeExecutableSchema} from 'graphql-tools'
 import {fileLoader, mergeTypes, mergeResolvers} from 'merge-graphql-schemas'
+import {authenticateJwt} from './passport';
+import {PrismaClient} from '@prisma/client'
+const prisma = new PrismaClient()
 
 dotenv.config()
 
@@ -19,8 +22,9 @@ const schema = makeExecutableSchema({
     resolvers: mergeResolvers(allResolvers)
 })
 
-const server = new GraphQLServer({schema})
+const server = new GraphQLServer({schema, context: {prisma}})
 server.express.use(logger("dev"))
+server.express.use('/api', authenticateJwt)
 
 server.start({port: PORT}, () => {
     console.log(`Server Running on http://localhost:${PORT}`)

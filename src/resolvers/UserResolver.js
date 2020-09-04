@@ -1,11 +1,11 @@
-import {PrismaClient} from '@prisma/client'
-import {generateSecret} from '../utils'
-
-const prisma = new PrismaClient()
+import {
+    generateSecret,
+    generateToken
+} from '../utils'
 
 export default {
     Mutation: {
-        createAccount: async (_, args) => {
+        createAccount: async (_, args, {prisma}) => {
             const {username, email, firstName, lastName, bio} = args
             return prisma.user.create({
                 data: {
@@ -37,7 +37,7 @@ export default {
             }
         },
 
-        confirmSecret: async (_, args) => {
+        confirmSecret: async (_, args, {prisma}) => {
             const {email, secret} = args
             const user = await prisma.user.findOne(
                 {
@@ -45,7 +45,7 @@ export default {
                 }
             )
             if (user.loginSecret === secret) {
-                return "TOKEN"
+                return generateToken(user.id)
             } else {
                 throw Error("Wrong email/secret combination.")
             }
