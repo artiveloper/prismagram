@@ -1,6 +1,6 @@
 type Query {
-    allUsers: [User]
     userById(id: Int!): User!
+    searchUser(term: String!): [User]
 }
 
 type Mutation {

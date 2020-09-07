@@ -8,6 +8,20 @@ import {sendSecretMail} from '../utils/email';
 const prisma = new PrismaClient()
 
 export default {
+    Query: {
+        searchUser: async (_, args) => {
+            const {term} = args
+            return await prisma.user.findMany({
+                where: {
+                    OR: [
+                        {username: {contains: term}},
+                        {firstName: {contains: term}},
+                        {lastName: {contains: term}}
+                    ]
+                }
+            })
+        }
+    },
     Mutation: {
         createAccount: async (_, args) => {
             const {username, email, firstName, lastName, bio} = args
@@ -19,10 +33,10 @@ export default {
                     lastName,
                     bio
                 }
-            })
+            });
         },
 
-        requestSecret: async (_, args, {request}) => {
+        requestSecret: async (_, args) => {
             const {email} = args
             const loginSecret = generateSecret()
             try {
@@ -42,7 +56,7 @@ export default {
             }
         },
 
-        confirmSecret: async (_, args, {request}) => {
+        confirmSecret: async (_, args) => {
             const {email, secret} = args
             const user = await prisma.user.findOne(
                 {
