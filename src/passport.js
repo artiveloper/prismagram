@@ -29,19 +29,23 @@ const verifyUser = async (payload, done) => {
 }
 
 export const authenticateJwt  =(req, res, next) => {
-    passport.authenticate("jwt", {session: false}, (error, user, info) => {
-        if (error) { // 서버 에러
-            console.error(error);
-            return next(error);
-        }
-        if (info) { // 클라이언트 에러 (로그인 실패)
-            return res.status(401).send('로그인 실패');
-        }
-        if (user) {
-            req.user = user
-        }
+    if (req.path === '/playground') {
         next()
-    })(req, res, next)
+    } else {
+        passport.authenticate("jwt", {session: false}, (error, user, info) => {
+            if (error) { // 서버 에러
+                console.error(error);
+                return next(error);
+            }
+            if (info) { // 클라이언트 에러 (로그인 실패)
+                return res.status(401).send('로그인 실패');
+            }
+            if (user) {
+                req.user = user
+            }
+            next()
+        })(req, res, next)
+    }
 }
 
 passport.use(new Strategy(jwtOptions, verifyUser))
