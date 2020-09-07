@@ -1,3 +1,7 @@
+type Query {
+    searchPost(term: String!): [Post!]!
+}
+
 type Mutation {
     toggleLike(postId: Int!): Boolean!
 }

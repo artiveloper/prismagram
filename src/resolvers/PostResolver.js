@@ -4,6 +4,20 @@ import {isAuthenticated} from '../middlewares';
 const prisma = new PrismaClient()
 
 export default {
+    Query: {
+        searchPost: async (_, args) => {
+            const {term} = args
+            return await prisma.post.findMany({
+                where: {
+                    OR: [
+                        {location: {startsWith: term}},
+                        {caption: {startsWith: term}}
+                    ]
+                }
+            })
+        }
+    },
+
     Mutation: {
         toggleLike: async (_, args, {request}) => {
             isAuthenticated(request)
