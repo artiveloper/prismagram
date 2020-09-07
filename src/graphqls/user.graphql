@@ -15,4 +15,7 @@ type Mutation {
     requestSecret(email: String!): Boolean!
 
     confirmSecret(email: String!, secret: String!): String!
+
+    follow(id: Int!): Boolean!
+    unfollow(id: Int!): Boolean!
 }
