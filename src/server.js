@@ -4,7 +4,8 @@ import path from 'path'
 import {GraphQLServer} from 'graphql-yoga'
 import {makeExecutableSchema} from 'graphql-tools'
 import {fileLoader, mergeTypes, mergeResolvers} from 'merge-graphql-schemas'
-import {authenticateJwt} from './passport';
+import {authenticateJwt} from './passport'
+import {isAuthenticated} from './middlewares'
 
 dotenv.config()
 
@@ -22,7 +23,7 @@ const schema = makeExecutableSchema({
 
 const server = new GraphQLServer({
     schema,
-    context: ({request}) => ({request})
+    context: ({request}) => ({request, isAuthenticated})
 })
 
 server.express.use(logger("dev"))
