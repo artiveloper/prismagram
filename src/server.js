@@ -26,12 +26,13 @@ const server = new GraphQLServer({
 })
 
 server.express.use(logger("dev"))
-server.express.use('/', authenticateJwt)
+server.express.use('/graphql', authenticateJwt)
 
 server.start(
     {
         port: PORT,
-        playground: "/playground"
+        playground: "/playground",
+        endpoint: "/graphql"
     },
     () => {
     console.log(`Server Running on http://localhost:${PORT}`)
