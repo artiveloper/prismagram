@@ -1,6 +1,7 @@
 type Query {
     userById(id: Int!): User!
     searchUser(term: String!): [User]
+    getUserProfile(id: Int!): User!
 }
 
 type Mutation {
@@ -11,11 +12,15 @@ type Mutation {
         lastName: String,
         bio: String
     ): User!
-
+    editAccount(
+        username: String,
+        email: String,
+        firstName: String,
+        lastName: String,
+        bio: String
+    ): User!
     requestSecret(email: String!): Boolean!
-
     confirmSecret(email: String!, secret: String!): String!
-
     follow(id: Int!): Boolean!
     unfollow(id: Int!): Boolean!
 }

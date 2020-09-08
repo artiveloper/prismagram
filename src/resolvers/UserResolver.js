@@ -9,6 +9,20 @@ const prisma = new PrismaClient()
 
 export default {
     Query: {
+        getUserProfile: async (_, args, {request, isAuthenticated}) => {
+            isAuthenticated(request)
+            const {id} = args
+            try {
+                return prisma.user.findOne({
+                    where: {
+                        id
+                    }
+                });
+            } catch (error) {
+                console.error(error)
+            }
+        },
+
         searchUser: async (_, args) => {
             const {term} = args
             return await prisma.user.findMany({
@@ -34,6 +48,24 @@ export default {
                     bio
                 }
             });
+        },
+
+        editAccount: async (_, args, {request, isAuthenticated}) => {
+            isAuthenticated(request)
+            const {username, email, firstName, lastName, bio} = args
+            const {user} = request
+            return prisma.user.update({
+                where: {
+                    id: user.id
+                },
+                data: {
+                    username,
+                    email,
+                    firstName,
+                    lastName,
+                    bio
+                }
+            })
         },
 
         requestSecret: async (_, args) => {
