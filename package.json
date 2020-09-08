@@ -28,7 +28,9 @@
   },
   "scripts": {
     "dev": "nodemon --exec babel-node src/server.js",
-    "prisma": "prisma migrate save --experimental && prisma migrate up --experimental && prisma generate",
-    "studio": "prisma studio --experimental"
+    "prisma:migrate": "npx prisma migrate save --experimental && prisma migrate up --experimental",
+    "prisma:sync": "npx prisma introspect",
+    "prisma:generate": "npx prisma generate",
+    "studio": "npx prisma studio --experimental"
   }
 }
