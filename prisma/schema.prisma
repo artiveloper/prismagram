@@ -1,55 +1,65 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+generator client {
+  provider = "prisma-client-js"
+}
 
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
-generator client {
-  provider = "prisma-client-js"
-}
-
 model User {
-    id Int @default(autoincrement()) @id
-    email String @unique
-    username String @unique
-    firstName String @default("")
-    lastName String @default("")
-    bio String
-    loginSecret String @default("")
-    posts Post[]
-    likes Like[]
-    comments Comment[]
-    followers User[] @relation("FollowRelation")
-    followings User[] @relation("FollowRelation")
+  id          Int     @default(autoincrement()) @id
+  email       String  @unique
+  username    String  @unique
+  firstName   String  @default("")
+  lastName    String  @default("")
+  loginSecret String? @default("")
+  bio         String
 }
 
 model Post {
-    id Int @default(autoincrement()) @id
-    user User
-    files File[]
-    location String
-    caption String
-    likes Like[]
-    comments Comment[]
+  id       Int    @default(autoincrement()) @id
+  location String
+  caption  String
+
+  user   User?  @relation(fields: [userId], references: [id])
+  userId   Int?
+
+  @@index([userId], name: "userId")
 }
 
 model Like {
-    id Int @default(autoincrement()) @id
-    user User
-    post Post
+  id     Int @default(autoincrement()) @id
+
+  user User @relation(fields:[userId], references:[id])
+  userId Int
+
+  post Post @relation(fields:[postId], references:[id])
+  postId Int
+
+  @@index([postId], name: "postId")
+  @@index([userId], name: "userId")
 }
 
 model Comment {
-    id Int @default(autoincrement()) @id
-    text String
-    user User
-    post Post
+  id     Int    @default(autoincrement()) @id
+  text   String
+
+  user User @relation(fields:[userId], references:[id])
+  userId Int
+
+  post Post @relation(fields:[postId], references:[id])
+  postId Int
+
+  @@index([postId], name: "postId")
+  @@index([userId], name: "userId")
 }
 
-model File {
-    id Int @default(autoincrement()) @id
-    url String
-    post Post
+model FollowRelation {
+  id          Int @default(autoincrement()) @id
+  followingId Int
+  followerId  Int
+
+  @@index([followerId], name: "followerId")
+  @@index([followingId], name: "followingId")
 }
