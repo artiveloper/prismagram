@@ -12,16 +12,10 @@ export default {
             const {id} = args
 
             try {
-                await prisma.user.update({
-                    where: {
-                        id: user.id
-                    },
+                await prisma.followRelation.create({
                     data: {
-                        followings: {
-                            connect: {
-                                id
-                            }
-                        }
+                        followingId: id,
+                        followerId: user.id
                     }
                 })
                 return true
@@ -37,16 +31,10 @@ export default {
             const {id} = args
 
             try {
-                await prisma.user.update({
-                    where: {
-                        id: user.id
-                    },
+                await prisma.user.delete({
                     data: {
-                        followings: {
-                            disconnect: {
-                                id
-                            }
-                        }
+                        followingId: id,
+                        followerId: user.id
                     }
                 })
                 return true
