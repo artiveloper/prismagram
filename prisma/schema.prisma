@@ -11,10 +11,10 @@ model User {
   id          Int     @default(autoincrement()) @id
   email       String  @unique
   username    String  @unique
-  firstName   String  @default("")
-  lastName    String  @default("")
+  firstName   String? @default("")
+  lastName    String? @default("")
   loginSecret String? @default("")
-  bio         String
+  bio         String?
 }
 
 model Post {

@@ -5,10 +5,10 @@ create table if not exists User
 		primary key,
 	email varchar(191) not null,
 	username varchar(191) not null,
-	firstName varchar(191) default '' not null,
-	lastName varchar(191) default '' not null,
-	loginSecret varchar(191) default '' not null,
-	bio varchar(191) not null
+	firstName varchar(191) default '',
+	lastName varchar(191) default '',
+	loginSecret varchar(191) default '',
+	bio varchar(191)
 )
 collate=utf8mb4_general_ci;
 
