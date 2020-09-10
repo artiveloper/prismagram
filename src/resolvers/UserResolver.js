@@ -23,6 +23,29 @@ export default {
             }
         },
 
+        me: async(_, __, {request, isAuthenticated}) => {
+            isAuthenticated(request)
+            const {user} = request
+            const response = {
+                username: true,
+                firstName: true,
+                lastName: true,
+                bio: true,
+                posts: true
+            }
+            const userProfile = prisma.user.findOne({
+                where: {
+                    id: user.id
+                }
+            })
+            const posts = prisma.post.findMany({
+                where: {
+                    userId: user.id
+                }
+            })
+            return { user: userProfile, posts }
+        },
+
         searchUser: async (_, args) => {
             const {term} = args
             return await prisma.user.findMany({

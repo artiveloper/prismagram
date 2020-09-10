@@ -1,7 +1,13 @@
+type ProfileResponse {
+    user: User!
+    posts: [Post!]!
+}
+
 type Query {
     userById(id: Int!): User!
     searchUser(term: String!): [User]
     getUserProfile(id: Int!): User!
+    me: ProfileResponse!
 }
 
 type Mutation {
