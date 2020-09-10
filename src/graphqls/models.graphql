@@ -12,6 +12,9 @@ type User {
     rooms: [Room]
     followedBy: [User]
     following: [User]
+
+    isSelf: Boolean!
+    amIFollowing: Boolean!
 }
 
 type Post {

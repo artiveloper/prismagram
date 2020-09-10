@@ -1,8 +1,5 @@
 import {PrismaClient} from '@prisma/client'
-import {
-    generateSecret,
-    generateToken
-} from '../utils'
+import {generateSecret, generateToken} from '../utils'
 import {sendSecretMail} from '../utils/email';
 
 const prisma = new PrismaClient()
@@ -11,13 +8,26 @@ export default {
     Query: {
         getUserProfile: async (_, args, {request, isAuthenticated}) => {
             isAuthenticated(request)
+            const {user} = request
             const {id} = args
             try {
-                return prisma.user.findOne({
+                const userProfile = await prisma.user.findOne({
                     where: {
                         id
                     }
-                });
+                })
+                userProfile.isSelf = user.id === id
+
+                const isFollow = await prisma.followRelation.findMany({
+                    where: {
+                        followerId: user.id,
+                        followingId: id
+                    }
+                })
+
+                userProfile.amIFollowing = isFollow.length > 0
+
+                return userProfile
             } catch (error) {
                 console.error(error)
             }
