@@ -20,6 +20,38 @@ export default {
                 console.log(error)
                 return []
             }
+        },
+
+        getFullPost: async (_, args) => {
+            const {id} = args
+            const post = await prisma.post.findOne({
+                where: {
+                    id
+                }
+            })
+
+            const comments = await prisma.comment.findMany({
+                where: {
+                    postId: id
+                },
+                select: {
+                    id: true,
+                    text: true,
+                    user: {select: {username : true}}
+                }
+            })
+
+            const likeCount = await prisma.like.count({
+                where: {
+                    postId: id
+                }
+            })
+
+            return {
+                post,
+                comments,
+                likeCount
+            }
         }
     },
 

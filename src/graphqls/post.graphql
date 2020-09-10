@@ -1,5 +1,12 @@
+type FullPost {
+    post: Post!
+    comments: [Comment!]!
+    likeCount: Int!
+}
+
 type Query {
     searchPost(term: String!): [Post!]!
+    getFullPost(id: Int!): FullPost!
 }
 
 type Mutation {

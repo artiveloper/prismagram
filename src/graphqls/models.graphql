@@ -19,6 +19,8 @@ type Post {
     location: String
     caption: String
     user: User
+
+    comments: [Comment]
 }
 
 type Comment {

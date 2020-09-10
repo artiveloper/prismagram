@@ -27,6 +27,8 @@ model Post {
   user   User?  @relation(fields: [userId], references: [id])
   userId   Int?
 
+  comments Comment[]
+
   @@index([userId], name: "userId")
 }
 
