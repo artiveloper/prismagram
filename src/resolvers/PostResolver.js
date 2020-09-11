@@ -34,7 +34,7 @@ export default {
                 },
                 include: {
                     Like: {
-                        where : {
+                        where: {
                             userId: user.id
                         }
                     }
@@ -43,6 +43,12 @@ export default {
 
             post.isLiked = !!post.Like
 
+            const files = await prisma.file.findMany({
+                where: {
+                    postId: id
+                }
+            })
+
             const comments = await prisma.comment.findMany({
                 where: {
                     postId: id
@@ -50,7 +56,7 @@ export default {
                 select: {
                     id: true,
                     text: true,
-                    user: {select: {username : true}}
+                    user: {select: {username: true}}
                 }
             })
 
@@ -62,6 +68,7 @@ export default {
 
             return {
                 post,
+                files,
                 comments,
                 likeCount
             }
@@ -69,6 +76,37 @@ export default {
     },
 
     Mutation: {
+        upload: async (_, args, {request, isAuthenticated}) => {
+            isAuthenticated(request)
+            const {caption, files} = args
+            const {user} = request
+
+            try {
+                const post = prisma.post.create({
+                    data: {
+                        caption,
+                        user: {connect: {id: user.id}}
+                    }
+                })
+
+                const uploadFiles = files.map(file => {
+                    return prisma.file.create({
+                        data: {
+                            url: file,
+                            Post: {connect: {id: post.id, userId: user.id}}
+                        }
+                    })
+                })
+
+                await prisma.$transaction([post, ...uploadFiles])
+
+                return post
+            } catch (error) {
+                console.error(error)
+                new Error(error)
+            }
+        },
+
         toggleLike: async (_, args, {request}) => {
             isAuthenticated(request)
             const {postId} = args

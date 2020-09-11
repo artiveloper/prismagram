@@ -20,7 +20,7 @@ create table if not exists Post
 (
 	id int auto_increment
 		primary key,
-	location varchar(191) not null,
+	location varchar(191),
 	caption varchar(191) not null,
 	userId int not null
 )
@@ -63,7 +63,20 @@ create table if not exists FollowRelation
     followingId int not null,
     followerId int not null
 )
-    collate=utf8mb4_unicode_ci;
+    collate=utf8mb4_general_ci;
 
 create index followingId on FollowRelation (followingId);
 create index followerId on FollowRelation (followerId);
+
+-- 게시글 사진
+
+create table if not exists File
+(
+    id int auto_increment
+        primary key,
+    url varchar(255) not null,
+    postId int not null
+)
+    collate=utf8mb4_general_ci;
+
+create index postId on File (postId);

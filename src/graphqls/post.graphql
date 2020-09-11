@@ -1,5 +1,6 @@
 type FullPost {
     post: Post!
+    files: [File!]!
     comments: [Comment!]!
     likeCount: Int!
 }
@@ -11,4 +12,5 @@ type Query {
 
 type Mutation {
     toggleLike(postId: Int!): Boolean!
+    upload(caption: String!, files: [String!]!): Post!
 }

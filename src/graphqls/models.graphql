@@ -23,9 +23,16 @@ type Post {
     caption: String
     user: User
 
+    files: [File]
     comments: [Comment]
 
     isLiked: Boolean!
+}
+
+type File {
+    id: Int
+    url: String
+    post: Post
 }
 
 type Comment {

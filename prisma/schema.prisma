@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["transactionApi"]
 }
 
 datasource db {
@@ -21,12 +22,13 @@ model User {
 
 model Post {
   id       Int    @default(autoincrement()) @id
-  location String
+  location String?
   caption  String
 
   user   User?  @relation(fields: [userId], references: [id])
   userId   Int?
 
+  files File[]
   comments Comment[]
 
   @@index([userId], name: "userId")
@@ -66,4 +68,10 @@ model FollowRelation {
 
   @@index([followerId], name: "followerId")
   @@index([followingId], name: "followingId")
+}
+
+model File {
+  id    Int @default(autoincrement()) @id
+  url   String
+  postId    Int
 }
