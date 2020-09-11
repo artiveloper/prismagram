@@ -1,7 +1,9 @@
 import {PrismaClient} from '@prisma/client'
 import {isAuthenticated} from '../middlewares';
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient({
+    log: ['query']
+})
 
 export default {
     Query: {
@@ -22,13 +24,24 @@ export default {
             }
         },
 
-        getFullPost: async (_, args) => {
+        getFullPost: async (_, args, {request}) => {
             const {id} = args
+            const {user} = request
+
             const post = await prisma.post.findOne({
                 where: {
                     id
+                },
+                include: {
+                    Like: {
+                        where : {
+                            userId: user.id
+                        }
+                    }
                 }
             })
+
+            post.isLiked = !!post.Like
 
             const comments = await prisma.comment.findMany({
                 where: {

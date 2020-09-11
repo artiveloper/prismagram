@@ -24,6 +24,8 @@ type Post {
     user: User
 
     comments: [Comment]
+
+    isLiked: Boolean!
 }
 
 type Comment {
