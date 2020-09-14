@@ -37,9 +37,6 @@ export const authenticateJwt  =(req, res, next) => {
                 console.error(error);
                 return next(error);
             }
-            if (info) { // 클라이언트 에러 (로그인 실패)
-                return res.status(401).send('로그인 실패');
-            }
             if (user) {
                 req.user = user
             }
