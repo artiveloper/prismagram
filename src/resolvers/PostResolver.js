@@ -24,7 +24,10 @@ export default {
             }
         },
 
-        getFullPost: async (_, args, {request}) => {
+        getFullPost: async (_, args, {request, isAuthenticated}) => {
+
+            isAuthenticated(request)
+
             const {id} = args
             const {user} = request
 
@@ -33,6 +36,19 @@ export default {
                     id
                 },
                 include: {
+                    files: {
+                        select: {
+                            id: true,
+                            url: true
+                        }
+                    },
+                    comments: {
+                        select: {
+                            id: true,
+                            text: true,
+                            user: {select: {username: true}}
+                        }
+                    },
                     Like: {
                         where: {
                             userId: user.id
@@ -43,35 +59,7 @@ export default {
 
             post.isLiked = !!post.Like
 
-            const files = await prisma.file.findMany({
-                where: {
-                    postId: id
-                }
-            })
-
-            const comments = await prisma.comment.findMany({
-                where: {
-                    postId: id
-                },
-                select: {
-                    id: true,
-                    text: true,
-                    user: {select: {username: true}}
-                }
-            })
-
-            const likeCount = await prisma.like.count({
-                where: {
-                    postId: id
-                }
-            })
-
-            return {
-                post,
-                files,
-                comments,
-                likeCount
-            }
+            return post
         }
     },
 
