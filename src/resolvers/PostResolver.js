@@ -95,12 +95,37 @@ export default {
             }
         },
 
+        editPost: async (_, args, {request, isAuthenticated}) => {
+            isAuthenticated(request)
+            const {id, caption, location} = args
+            const {user} = request
+
+            const post = await prisma.post.findMany({
+                where: {
+                    id,
+                    userId: user.id
+                }
+            })
+
+            if (post.length > 0) {
+                return prisma.post.update({
+                    where: {
+                        id
+                    },
+                    data: {
+                        caption,
+                        location
+                    }
+                });
+            } else {
+                throw Error("You can't do that.")
+            }
+        },
+
         toggleLike: async (_, args, {request}) => {
             isAuthenticated(request)
             const {postId} = args
             const {user} = request
-
-            console.log(postId, user.id)
 
             try {
                 const existLike = await prisma.like.findMany({

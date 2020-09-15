@@ -6,4 +6,5 @@ type Query {
 type Mutation {
     toggleLike(postId: Int!): Boolean!
     upload(caption: String!, files: [String!]!): Post!
+    editPost(id: Int!, caption: String, location: String): Post!
 }
