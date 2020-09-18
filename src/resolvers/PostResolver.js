@@ -5,6 +5,9 @@ const prisma = new PrismaClient({
     log: ['query']
 })
 
+const EDIT = "EDIT"
+const DELETE = "DELETE"
+
 export default {
     Query: {
         searchPost: async (_, args) => {
@@ -97,28 +100,39 @@ export default {
 
         editPost: async (_, args, {request, isAuthenticated}) => {
             isAuthenticated(request)
-            const {id, caption, location} = args
+            const {id, caption, location, edit_actions} = args
             const {user} = request
 
-            const post = await prisma.post.findMany({
-                where: {
-                    id,
-                    userId: user.id
-                }
-            })
-
-            if (post.length > 0) {
-                return prisma.post.update({
+            try {
+                const post = await prisma.post.findMany({
                     where: {
-                        id
-                    },
-                    data: {
-                        caption,
-                        location
+                        id,
+                        userId: user.id
                     }
-                });
-            } else {
-                throw Error("You can't do that.")
+                })
+
+                if (post.length > 0) {
+                    if (edit_actions === EDIT) {
+                        return prisma.post.update({
+                            where: {
+                                id
+                            },
+                            data: {
+                                caption,
+                                location
+                            }
+                        });
+                    } else if(edit_actions === DELETE) {
+                        const result = await prisma.$executeRaw(
+                            `delete from Post where id=${id};`
+                        )
+                        console.log(result)
+                    }
+                } else {
+                    throw Error("You can't do that.")
+                }
+            } catch (error) {
+                console.error(error)
             }
         },
 

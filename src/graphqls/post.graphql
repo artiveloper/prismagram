@@ -1,3 +1,8 @@
+enum POST_EDIT_ACTIONS {
+    EDIT
+    DELETE
+}
+
 type Query {
     searchPost(term: String!): [Post!]!
     getFullPost(id: Int!): Post!
@@ -6,5 +11,10 @@ type Query {
 type Mutation {
     toggleLike(postId: Int!): Boolean!
     upload(caption: String!, files: [String!]!): Post!
-    editPost(id: Int!, caption: String, location: String): Post!
+    editPost(
+        id: Int!
+        caption: String
+        location: String
+        edit_actions: POST_EDIT_ACTIONS
+    ): Post
 }

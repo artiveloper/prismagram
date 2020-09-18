@@ -29,6 +29,7 @@ model Post {
   userId   Int?
 
   files File[]
+  likes Like[]
   comments Comment[]
 
   @@index([userId], name: "userId")
