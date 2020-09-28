@@ -4,6 +4,7 @@ enum POST_EDIT_ACTIONS {
 }
 
 type Query {
+    seeFeed: [Post!]!
     searchPost(term: String!): [Post!]!
     getFullPost(id: Int!): Post!
 }

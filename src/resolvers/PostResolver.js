@@ -1,5 +1,4 @@
 import {PrismaClient} from '@prisma/client'
-import {isAuthenticated} from '../middlewares';
 
 const prisma = new PrismaClient({
     log: ['query']
@@ -10,6 +9,22 @@ const DELETE = "DELETE"
 
 export default {
     Query: {
+        seeFeed: async(_, __, {request, isAuthenticated}) => {
+            isAuthenticated(request)
+            const {user} = request
+            const followings = await prisma.followRelation.findMany({
+                where: {
+                    followerId: user.id
+                }
+            })
+
+            return await prisma.post.findMany({
+                where: {
+                    userId: {in: [...followings.map(user => user.id), user.id]}
+                }
+            })
+        },
+
         searchPost: async (_, args) => {
             const {term} = args
             try {
